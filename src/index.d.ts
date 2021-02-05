@@ -15,12 +15,14 @@ export type DebounceInputProps<WrappedComponent, WrappedComponentProps> = Wrappe
   readonly onChange: React.ChangeEventHandler<WrappedComponent>;
   readonly onKeyDown?: React.KeyboardEventHandler<WrappedComponent>;
   readonly onBlur?: React.FocusEventHandler<WrappedComponent>;
+  readonly onWheel?: React.WheelEventHandler<WrappedCompoent>;
   readonly value?: string | number;
   readonly placeholder?: string | number;
   readonly minLength?: number;
   readonly debounceTimeout?: number;
   readonly forceNotifyByEnter?: boolean;
   readonly forceNotifyOnBlur?: boolean;
+  readonly forceNotifyOnWheel?: boolean;
   readonly inputRef?: React.Ref<WrappedComponent>;
 };
 

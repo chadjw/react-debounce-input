@@ -129,6 +129,10 @@ Notification of current value will be sent immediately by hitting `Enter` key. E
 
 Same as `forceNotifyByEnter`, but notification will be sent when focus leaves the input field.
 
+### `forceNotifyOnWheel`: PropTypes.bool (default: true)
+
+Same as `forceNotifyByEnter`, but notification will be sent when using the scroll wheel on a number input field.
+
 ### `inputRef`: PropTypes.func (default: undefined)
 
 Will pass `ref={inputRef}` to generated input element. We needed to rename `ref` to `inputRef` since `ref` is a special prop in React and cannot be passed to children. 

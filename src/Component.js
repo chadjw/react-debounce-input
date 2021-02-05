@@ -10,6 +10,7 @@ export class DebounceInput extends React.PureComponent {
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func,
     onBlur: PropTypes.func,
+    onWheel: PropTypes.func,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -18,6 +19,7 @@ export class DebounceInput extends React.PureComponent {
     debounceTimeout: PropTypes.number,
     forceNotifyByEnter: PropTypes.bool,
     forceNotifyOnBlur: PropTypes.bool,
+    forceNotifyOnWheel: PropTypes.bool,
     inputRef: PropTypes.func
   };
 
@@ -27,11 +29,13 @@ export class DebounceInput extends React.PureComponent {
     type: 'text',
     onKeyDown: undefined,
     onBlur: undefined,
+    onWheel: undefined,
     value: undefined,
     minLength: 0,
     debounceTimeout: 100,
     forceNotifyByEnter: true,
     forceNotifyOnBlur: true,
+    forceNotifyOnWheel: true,
     inputRef: undefined
   };
 
@@ -119,6 +123,16 @@ export class DebounceInput extends React.PureComponent {
     }
   };
 
+  onWheel = event => {
+    this.forceNotify(event);
+    // Invoke original onWheel if present
+    const { onWheel } = this.props;
+    if (onWheel) {
+      event.persist();
+      onWheel(event);
+    }
+  };
+
 
   createNotifier = debounceTimeout => {
     if (debounceTimeout < 0) {
@@ -183,8 +197,10 @@ export class DebounceInput extends React.PureComponent {
       debounceTimeout: _debounceTimeout,
       forceNotifyByEnter,
       forceNotifyOnBlur,
+      forceNotifyOnWheel,
       onKeyDown,
       onBlur,
+      onWheel,
       inputRef,
       ...props
     } = this.props;
@@ -208,6 +224,15 @@ export class DebounceInput extends React.PureComponent {
       maybeOnBlur = {};
     }
 
+    let maybeOnWheel;
+    if (forceNotifyOnWheel) {
+      maybeOnWheel = { onWheel: this.onWheel };
+    } else if (onWheel) {
+      maybeOnWheel = { onWheel };
+    } else {
+      maybeOnWheel = {};
+    }
+
     const maybeRef = inputRef ? {ref: inputRef} : {};
 
     return React.createElement(element, {
@@ -216,6 +241,7 @@ export class DebounceInput extends React.PureComponent {
       value,
       ...maybeOnKeyDown,
       ...maybeOnBlur,
+      ...maybeOnWheel,
       ...maybeRef
     });
   }
